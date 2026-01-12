@@ -13,7 +13,6 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
-scene.background = new THREE.Color("#111111") // or '#6d236d' or 'skyblue'
 
 /**
  * Textures
@@ -34,8 +33,8 @@ fontLoader.load(
     (font) =>
     {
         // Material
-        // const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
-        const material = new THREE.MeshNormalMaterial()
+        const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
+        //const material = new THREE.MeshNormalMaterial()
 
         // Text
         const textGeometry = new TextGeometry(
