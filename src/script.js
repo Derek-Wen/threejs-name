@@ -2,19 +2,18 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
-import GUI from 'lil-gui'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 
 /**
  * Base
  */
-// Debug
-const gui = new GUI()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+scene.background = new THREE.Color("#111111") // or '#6d236d' or 'skyblue'
 
 /**
  * Textures
@@ -28,12 +27,15 @@ matcapTexture.colorSpace = THREE.SRGBColorSpace
  */
 const fontLoader = new FontLoader()
 
+const donuts = []
+
 fontLoader.load(
     '/fonts/helvetiker_regular.typeface.json',
     (font) =>
     {
         // Material
-        const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
+        // const material = new THREE.MeshMatcapMaterial({ matcap: matcapTexture })
+        const material = new THREE.MeshNormalMaterial()
 
         // Text
         const textGeometry = new TextGeometry(
@@ -70,6 +72,7 @@ fontLoader.load(
             donut.scale.set(scale, scale, scale)
 
             scene.add(donut)
+            donuts.push(donut)
         }
     }
 )
@@ -128,6 +131,14 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Animate donuts
+    donuts.forEach((donut, index) => {
+        donut.rotation.x += 0.002
+        donut.rotation.y += 0.002
+
+        donut.position.y += Math.sin(elapsedTime + index) * 0.0005
+    })
 
     // Update controls
     controls.update()
